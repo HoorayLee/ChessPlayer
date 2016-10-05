@@ -1,0 +1,7 @@
+C3 Raid
+depth:4
+..XX.
+..XOX
+..XX.
+..XO.
+.....

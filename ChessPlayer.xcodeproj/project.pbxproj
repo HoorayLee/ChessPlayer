@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		465D79BE1DA441CC0043323C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 465D79BD1DA441CC0043323C /* main.cpp */; };
+		465D79C51DA4438F0043323C /* String2Int.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 465D79C41DA4438F0043323C /* String2Int.cpp */; };
+		465D79C91DA44DC50043323C /* CS561.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 465D79C81DA44DC50043323C /* CS561.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,9 @@
 /* Begin PBXFileReference section */
 		465D79BA1DA441CA0043323C /* ChessPlayer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ChessPlayer; sourceTree = BUILT_PRODUCTS_DIR; };
 		465D79BD1DA441CC0043323C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		465D79C41DA4438F0043323C /* String2Int.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String2Int.cpp; sourceTree = "<group>"; };
+		465D79C71DA444070043323C /* Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
+		465D79C81DA44DC50043323C /* CS561.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CS561.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +62,10 @@
 		465D79BC1DA441CA0043323C /* ChessPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				465D79C41DA4438F0043323C /* String2Int.cpp */,
 				465D79BD1DA441CC0043323C /* main.cpp */,
+				465D79C71DA444070043323C /* Header.h */,
+				465D79C81DA44DC50043323C /* CS561.cpp */,
 			);
 			path = ChessPlayer;
 			sourceTree = "<group>";
@@ -119,6 +127,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				465D79BE1DA441CC0043323C /* main.cpp in Sources */,
+				465D79C51DA4438F0043323C /* String2Int.cpp in Sources */,
+				465D79C91DA44DC50043323C /* CS561.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
