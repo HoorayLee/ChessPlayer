@@ -10,12 +10,58 @@
 #include <fstream>
 #include "Header.h"
 using namespace std;
+
+struct node{
+    string nowplay;
+    int depth;
+    vector<vector<int>> broadstate;
+    vector<vector<int>> avaliable;
+    node *next;
+    node *silibing;
+    
+    node(string n, int d, vector<vector<int>> b, vector<vector<int>> a): nowplay(n), depth(d), broadstate(b), avaliable(a){}
+};
+
 class Player{
-public:
+private:
     int raid = 0;
     int self = 0;
     vector<int> move;
-    //int nextx, nexty;
+    vector<vector<int>> broadstate;
+    
+public:
+    void output(int N, string youplay, int x, int y, vector<vector<int>> tmp){
+        ofstream ofile;
+        string filepath = "/Users/kouruiri/Documents/ChessPlayer/ChessPlayer/output.txt";
+        ofile.open(filepath,ios::trunc);
+        checkraid(youplay, x, y, broadstate);
+        char move1 = char(move[0] + 65);
+        if(raid == 1){
+            ofile << move1 << move[1] + 1 <<" ";
+            ofile << "Raid" <<endl;
+            raid = 0;
+        }
+        else{
+            ofile << move1 << move[1] + 1 <<" ";
+            ofile << "Stake" <<endl;
+        }
+        for (int i = 0; i < N; i++) {
+            for (int k = 0; k < N; k++) {
+                if (tmp[i][k] == 1) {
+                    ofile << "O";
+                }
+                else if(tmp[i][k] == -1){
+                    ofile << "X";
+                }
+                else if (tmp[i][k] == 0){
+                    ofile << ".";
+                }
+            }
+            ofile<<endl;
+        }
+        ofile.close();
+    }
+    
     int Ocalculate(int N, vector<vector<int>> cellvalue, vector<vector<int>> broadstate){
         int value = 0;
         int i = 0, k = 0;
@@ -31,21 +77,7 @@ public:
         }
         return value;
     }
-//    int Xcalculate(int N, vector<vector<int>> cellvalue, vector<vector<int>> broadstate){
-//        int value = 0;
-//        int i = 0, k = 0;
-//        for (i = 0; i < N; i++) {
-//            for (k = 0; k < N; k++) {
-//                if (broadstate[i][k] == 1) {
-//                    value -= cellvalue[i][k];
-//                }
-//                else if(broadstate[i][k] == -1){
-//                    value += cellvalue[i][k];
-//                }
-//            }
-//        }
-//        return value;
-//    }
+
     vector<vector<int>> checkraid(string uplay, int x, int y, vector<vector<int>> b){
         raid = 0;
         int l = -2,
@@ -114,13 +146,13 @@ public:
         return b;
     }
     
-    int Minimax(int N, string nowplay, string youplay, int depth, vector<vector<int>> cellvalue, vector<vector<int>> broadstate,vector<vector<int>> avaliable){
+    int Minimax(int N, string nowplay, string youplay, int depth, int oridepth, vector<vector<int>> cellvalue, vector<vector<int>> broadstate,vector<vector<int>> avaliable){
         raid = 0;
+        this->broadstate = broadstate;
         vector<vector<int>> tmp, ava;
         int a;
         if (depth == 0 || avaliable.size() == 0) {
             int Ovalue = Ocalculate(N, cellvalue, broadstate);
-            //int Xvalue = Xcalculate(N, cellvalue, broadstate);
             return (youplay == "O" ?  Ovalue : -Ovalue);
         }
         if(nowplay == youplay){
@@ -134,45 +166,14 @@ public:
                 tmp = checkraid(youplay, x, y, broadstate);
                 tmp[y][x] = nowplay == "O" ? 1 : -1;
                 ava.erase(ava.begin() + i);
-                int result = Minimax(N, otherplay, youplay, depth - 1, cellvalue, tmp, ava);
+                int result = Minimax(N, otherplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava);
                 if (a < result) {
                     a = result;
                     move.clear();
                     move.push_back(x);
                     move.push_back(y);
-                    if(depth == 4){
-                        ofstream ofile;
-                        string filepath = "/Users/kouruiri/Documents/ChessPlayer/ChessPlayer/output.txt";
-                        ofile.open(filepath,ios::trunc);
-                        checkraid(youplay, x, y, broadstate);
-                        char move1 = char(move[0] + 65);
-                        if(raid == 1){
-                            ofile << move1 << move[1] + 1 <<" ";
-                            ofile << "Raid" <<endl;
-                            raid = 0;
-                        }
-                        else{
-                            ofile << move1 << move[1] + 1 <<" ";
-                            ofile << "Stake" <<endl;
-                        }
-                        ofile << "depth:"<<depth <<endl;
-                        
-                        // ofile<< move[0] << move[1] <<endl;
-                        for (int i = 0; i < N; i++) {
-                            for (int k = 0; k < N; k++) {
-                                if (tmp[i][k] == 1) {
-                                    ofile << "O";
-                                }
-                                else if(tmp[i][k] == -1){
-                                    ofile << "X";
-                                }
-                                else if (tmp[i][k] == 0){
-                                    ofile << ".";
-                                }
-                            }
-                            ofile<<endl;
-                        }
-                        ofile.close();
+                    if(depth == oridepth){
+                        output(N, nowplay, x, y, tmp);
 
                     }
                 }
@@ -190,7 +191,7 @@ public:
                 tmp = checkraid(nowplay, x, y, broadstate);
                 tmp[y][x] = nowplay == "O" ? 1 : -1;
                 ava.erase(ava.begin() + i);
-                int result = Minimax(N, youplay, youplay, depth - 1, cellvalue, tmp, ava);
+                int result = Minimax(N, youplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava);
                 if (a > result) {
                     a = result;
                 }
@@ -199,7 +200,55 @@ public:
         return a;
     }
     
-    void AlphaBeta(){
-        
+    int AlphaBeta(int N, string nowplay, string youplay, int depth, int oridepth, vector<vector<int>> cellvalue, vector<vector<int>> broadstate,vector<vector<int>> avaliable, int alpha, int beta){
+        raid = 0;
+        vector<vector<int>> tmp, ava;
+        int a;
+        if (depth == 0 || avaliable.size() == 0) {
+            int Ovalue = Ocalculate(N, cellvalue, broadstate);
+            return (youplay == "O" ?  Ovalue : -Ovalue);
+        }
+        if(nowplay == youplay){
+            alpha = -99999;
+            string otherplay = youplay == "O" ? "X" : "O";
+            for (int i = 0; i < avaliable.size(); i++) {
+                tmp = broadstate;
+                ava = avaliable;
+                int x = avaliable[i][0];
+                int y = avaliable[i][1];
+                tmp = checkraid(youplay, x, y, broadstate);
+                tmp[y][x] = nowplay == "O" ? 1 : -1;
+                ava.erase(ava.begin() + i);
+                int result = Minimax(N, otherplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava);
+                if (alpha < result) {
+                    alpha = result;
+                    move.clear();
+                    move.push_back(x);
+                    move.push_back(y);
+                    if(depth == oridepth){
+                        output(N, nowplay, x, y, tmp);
+                    }
+                }
+            }
+            return alpha;
+        }
+        else if(nowplay != youplay){
+            beta = 99999;
+            for (int i = 0; i < avaliable.size(); i++) {
+                tmp = broadstate;
+                ava = avaliable;
+                int x = avaliable[i][0];
+                int y = avaliable[i][1];
+                tmp = checkraid(nowplay, x, y, broadstate);
+                tmp[y][x] = nowplay == "O" ? 1 : -1;
+                ava.erase(ava.begin() + i);
+                int result = Minimax(N, youplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava);
+                if (beta > result) {
+                    beta = result;
+                }
+            }
+            return beta;
+        }
+        return a;
     }
 };

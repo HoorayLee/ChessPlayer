@@ -158,7 +158,7 @@ int main(int argc, const char * argv[]) {
     if (mode[0] == 'M') {
         cout << "result for Minimax:" << endl;
         cout << "Play as " << youplay << endl;
-        int k = play.Minimax(N, youplay, youplay, depth, Overallvalue, Boardstate, avaliable);
+        int k = play.Minimax(N, youplay, youplay, depth, depth, Overallvalue, Boardstate, avaliable);
         cout << k;
     }
     else if(mode[0] == 'A'){

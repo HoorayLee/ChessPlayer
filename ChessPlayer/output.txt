@@ -1,5 +1,5 @@
 C3 Raid
-depth:4
+depth:5
 ..XX.
 ..XOX
 ..XX.
