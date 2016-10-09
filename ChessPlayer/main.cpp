@@ -164,7 +164,7 @@ int main(int argc, const char * argv[]) {
     else if(mode[0] == 'A'){
         cout << "result for Alpha-Beta:" << endl;
         cout << "Play as " << youplay << endl;
-
+        play.Alphabeta(N, youplay, youplay, depth, depth, Overallvalue, Boardstate, avaliable, -9999, 99999);
     }
     else if (mode[0] == 'C'){
         cout << "result for Competition:" << endl;
