@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <fstream>
+#include <thread>
 #include "Header.h"
 using namespace std;
 
@@ -175,7 +176,7 @@ public:
                 ava = avaliable;
                 int x = avaliable[i][0];
                 int y = avaliable[i][1];
-                tmp = checkraid(youplay, x, y, broadstate);
+                tmp = checkraid(youplay, y, x, broadstate);
                 tmp[y][x] = nowplay == "O" ? 1 : -1;
                 ava.erase(ava.begin() + i);
                 int result = Minimax(N, otherplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava);
@@ -185,7 +186,7 @@ public:
                     move.push_back(x);
                     move.push_back(y);
                     if(depth == oridepth){
-                        tmp = checkraid(youplay, x, y, broadstate);
+                        tmp = checkraid(youplay, y, x, broadstate);
                         tmp[y][x] = nowplay == "O" ? 1 : -1;
                         output(N, nowplay, x, y, tmp);
 
@@ -230,9 +231,11 @@ public:
                 ava = avaliable;
                 int x = avaliable[i][0];
                 int y = avaliable[i][1];
-                tmp = checkraid(youplay, x, y, broadstate);
+                tmp = checkraid(youplay, y, x, broadstate);
                 tmp[y][x] = nowplay == "O" ? 1 : -1;
                 ava.erase(ava.begin() + i);
+//                thread newth(Alphabeta(N, otherplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava,alpha,beta));
+//                newth.join();
                 int result = Alphabeta(N, otherplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava,alpha,beta);
                 if (alpha < result) {
                     alpha = result;
@@ -241,7 +244,7 @@ public:
                     move.push_back(x);
                     move.push_back(y);
                     if(depth == oridepth){
-                        tmp = checkraid(youplay, x, y, broadstate);
+                        tmp = checkraid(youplay, y, x, broadstate);
                         tmp[y][x] = nowplay == "O" ? 1 : -1;
                         output(N, nowplay, x, y, tmp);
                         
@@ -251,8 +254,7 @@ public:
                     break;
                 }
             }
-            
-            //return alpha;
+
         }
         else if(nowplay != youplay){
             beta = 99999;
@@ -261,7 +263,7 @@ public:
                 ava = avaliable;
                 int x = avaliable[i][0];
                 int y = avaliable[i][1];
-                tmp = checkraid(nowplay, x, y, broadstate);
+                tmp = checkraid(nowplay, y, x, broadstate);
                 tmp[y][x] = nowplay == "O" ? 1 : -1;
                 ava.erase(ava.begin() + i);
                 int result = Alphabeta(N, youplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava,alpha,beta);
@@ -278,72 +280,4 @@ public:
         return bv;
     }
 
-//    int AlphaBeta(int N, node *n, int depth, int alpha, int beta){
-//        raid = 0;
-//        int bv = 0;
-//        vector<vector<int>> tmp, ava;
-//
-//        if (n -> depth == 0 || n -> avaliable.size() == 0) {
-//            int Ovalue = Ocalculate(N, cellvalue, n -> broadstate);
-//            return (n -> nowplay == "O" ?  Ovalue : -Ovalue);
-//        }
-//        if(n -> nowplay == youplay){
-//            alpha = -99999;
-//            string otherplay = youplay == "O" ? "X" : "O";
-//            for (int i = 0; i < n -> avaliable.size(); i++) {
-//                raid = 0;
-//                tmp = n -> broadstate;
-//                ava = n -> avaliable;
-//                int x = n -> avaliable[i][0];
-//                int y = n -> avaliable[i][1];
-//                tmp = checkraid(youplay, x, y, n -> broadstate);
-//                tmp[y][x] = n -> nowplay == "O" ? 1 : -1;
-//                ava.erase(ava.begin() + i);
-//                node *child = new node(n -> depth - 1, otherplay, tmp, ava);
-//                child -> raid = raid;
-//
-//                int result = AlphaBeta(N, child, depth, alpha, beta);
-//                if (alpha < result) {
-//                    alpha = result;
-//                    bv = alpha;
-//                    move.clear();
-//                    move.push_back(x);
-//                    move.push_back(y);
-//                    if(n -> depth == depth - 1){
-//                        this -> raid = n -> raid;
-//                        output(N, n -> nowplay, x, y, n -> broadstate);
-//                    }
-//                }
-//                
-//                if(beta <= alpha){
-//                    break;
-//                }
-//                
-//            }
-//        }
-//        else{
-//            beta = 99999;
-//            for (int i = 0; i < n -> avaliable.size(); i++) {
-//                tmp = n -> broadstate;
-//                ava = n -> avaliable;
-//                int x = n -> avaliable[i][0];
-//                int y = n -> avaliable[i][1];
-//                tmp = checkraid(n -> nowplay, x, y, broadstate);
-//                tmp[y][x] = n -> nowplay == "O" ? 1 : -1;
-//                ava.erase(ava.begin() + i);
-//                node *child = new node(n -> depth - 1, youplay, tmp, ava);
-//    
-//                int result = AlphaBeta(N, child, depth, alpha, beta);
-//                if (beta > result) {
-//                    beta = result;
-//                    bv = beta;
-//                }
-//                if(beta <= alpha){
-//                    break;
-//                }
-//            }
-//            return beta;
-//        }
-//        return bv;
-//    }
 };

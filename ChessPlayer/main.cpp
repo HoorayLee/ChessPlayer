@@ -30,7 +30,7 @@ int main(int argc, const char * argv[]) {
     
     string2int toint = *new string2int();
     Player play = *new Player();
-    iinfo.open("/Users/kouruiri/Documents/ChessPlayer/ChessPlayer/input.txt");
+    iinfo.open("/Users/kouruiri/Documents/ChessPlayer/ChessPlayer/TestCasesHW2/Test10/input.txt");
     if (! iinfo.is_open())
     { cout << "Error opening file"; exit (1); }
     
@@ -131,7 +131,7 @@ int main(int argc, const char * argv[]) {
             else if (a == 'O'){
                 cellstate.push_back(1);
             }
-            else{
+            else if(a == '.'){
                 cellstate.push_back(0);
                 cellvalue.push_back(x);
                 cellvalue.push_back(y);
@@ -151,6 +151,13 @@ int main(int argc, const char * argv[]) {
         }
     }
     
+    if(cellstate.size()){
+        Boardstate.push_back(cellstate);
+        cellstate.clear();
+        x = 0;
+        y++;
+        i++;
+    }
     //////////////////////////////////////////////////////////
     //               Read the borad state       <End>       //
     //////////////////////////////////////////////////////////
