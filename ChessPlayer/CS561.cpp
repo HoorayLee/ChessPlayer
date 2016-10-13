@@ -203,7 +203,7 @@ public:
                 ava = avaliable;
                 int x = avaliable[i][0];
                 int y = avaliable[i][1];
-                tmp = checkraid(nowplay, x, y, broadstate);
+                tmp = checkraid(nowplay, y, x, broadstate);
                 tmp[y][x] = nowplay == "O" ? 1 : -1;
                 ava.erase(ava.begin() + i);
                 int result = Minimax(N, youplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava);
@@ -234,10 +234,9 @@ public:
                 tmp = checkraid(youplay, y, x, broadstate);
                 tmp[y][x] = nowplay == "O" ? 1 : -1;
                 ava.erase(ava.begin() + i);
-//                thread newth(Alphabeta(N, otherplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava,alpha,beta));
-//                newth.join();
+
                 int result = Alphabeta(N, otherplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava,alpha,beta);
-                if (alpha < result) {
+                if (alpha <= result) {
                     alpha = result;
                     bv = alpha;
                     move.clear();

@@ -30,7 +30,7 @@ int main(int argc, const char * argv[]) {
     
     string2int toint = *new string2int();
     Player play = *new Player();
-    iinfo.open("/Users/kouruiri/Documents/ChessPlayer/ChessPlayer/TestCasesHW2/Test10/input.txt");
+    iinfo.open("/Users/kouruiri/Documents/ChessPlayer/ChessPlayer/TestCasesHW2/Test7/input.txt");
     if (! iinfo.is_open())
     { cout << "Error opening file"; exit (1); }
     
