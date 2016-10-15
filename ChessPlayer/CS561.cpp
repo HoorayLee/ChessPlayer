@@ -12,21 +12,10 @@
 #include "Header.h"
 using namespace std;
 
-struct node{
-    int depth, raid;
-    string nowplay;
-    vector<vector<int>> broadstate;
-    vector<vector<int>> avaliable;
-    node *next;
-    node *silibing;
-    
-    node(): nowplay(""), broadstate(NULL), avaliable(NULL){}
-    node(int d, string n, vector<vector<int>> b, vector<vector<int>> a): depth(d), nowplay(n), broadstate(b), avaliable(a){}
-};
-
 class Player{
 private:
     int raid = 0;
+    int prevr = 0;
     int self = 0;
     string youplay;
     vector<int> move;
@@ -122,10 +111,12 @@ public:
                 if (r == -1){
                     b[x + 1][y] = 1;
                     raid = 1;
+                    
                 }
                 if (u == -1){
                     b[x][y + 1] = 1;
                     raid = 1;
+                
                 }
                 if (d == -1){
                     b[x][y - 1] = 1;
@@ -216,6 +207,7 @@ public:
     }
     int Alphabeta(int N, string nowplay, string youplay, int depth, int oridepth, vector<vector<int>> cellvalue, vector<vector<int>> broadstate,vector<vector<int>> avaliable, int alpha, int beta){
         raid = 0;
+    //    prevr = 0;
         int bv;
         this->broadstate = broadstate;
         vector<vector<int>> tmp, ava;
@@ -236,7 +228,7 @@ public:
                 ava.erase(ava.begin() + i);
 
                 int result = Alphabeta(N, otherplay, youplay, depth - 1,oridepth, cellvalue, tmp, ava,alpha,beta);
-                if (alpha <= result) {
+                if (alpha < result) {
                     alpha = result;
                     bv = alpha;
                     move.clear();
@@ -245,9 +237,18 @@ public:
                     if(depth == oridepth){
                         tmp = checkraid(youplay, y, x, broadstate);
                         tmp[y][x] = nowplay == "O" ? 1 : -1;
+                        prevr = raid;
                         output(N, nowplay, x, y, tmp);
-                        
                     }
+                }
+                else if(alpha == result){
+                    move.clear();
+                    move.push_back(x);
+                    move.push_back(y);
+                        if(raid == 0 && prevr == 1 && depth == oridepth){
+                            output(N, nowplay, x, y, tmp);
+                            prevr = 0;
+                        }
                 }
                 if(beta <= alpha){
                     break;
