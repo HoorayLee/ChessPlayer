@@ -545,21 +545,21 @@ public:
         int value = 0;
         int i = 0, k = 0;
         for (i = 0; i < N; i++) {
-            for (k = 0; k < N; k ++) {
-                if (broadstate[i][k] == 1) {
-                    value += cellvalue[i][k];
-                }
-                else if(broadstate[i][k] == -1){
-                    value -= cellvalue[i][k];
-                }
-//                if(k < N){
-//                    value = broadstate[i][k] == 1 ? value + cellvalue[i][k] : value - cellvalue[i][k];
-//                    
+            for (k = 0; k < N + 1; k+=2) {
+//                if (broadstate[i][k] == 1) {
+//                    value += cellvalue[i][k];
 //                }
-//                
-//                if(k + 1 < N){
-//                    value = broadstate[i][k + 1] == 1 ? value + cellvalue[i][k + 1] : value - cellvalue[i][k + 1];
+//                else if(broadstate[i][k] == -1){
+//                    value -= cellvalue[i][k];
 //                }
+                if(k < N){
+                    value = broadstate[i][k] == 1 ? value + cellvalue[i][k] : value + cellvalue[i][k] * broadstate[i][k];
+                    
+                }
+                
+                if(k + 1 < N){
+                    value = broadstate[i][k + 1] == 1 ? value + cellvalue[i][k + 1] : value + cellvalue[i][k + 1] * broadstate[i][k + 1];
+                }
             }
         }
         return value;
@@ -731,7 +731,7 @@ public:
                     if(depth == oridepth){
                         tmp = checkraid(youplay, y, x, broadstate);
                         tmp[y][x] = nowplay == "O" ? 1 : -1;
-                        //raid = checkraid(youplay, y, x, broadstate, 1);
+                        raid = checkraid(youplay, y, x, broadstate, 1);
                         prevr = raid;
                         output(N, nowplay, x, y, tmp);
                         
@@ -798,7 +798,7 @@ public:
                     if(depth == oridepth){
                         tmp = checkraid(youplay, y, x, broadstate);
                         tmp[y][x] = nowplay == "O" ? 1 : -1;
-                        //raid = checkraid(youplay, y, x, broadstate, 1);
+                        raid = checkraid(youplay, y, x, broadstate, 1);
                         prevr = raid;
                         output(N, nowplay, x, y, tmp);
                     }
